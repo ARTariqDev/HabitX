@@ -1,3 +1,4 @@
+//models/Habit.js
 const mongoose = require('../db');
 
 const habitSchema = new mongoose.Schema({

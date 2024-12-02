@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import LoginForm from "./LoginForm"; // Login form component
-import SignupForm from "./SignupForm"; // Signup form component (optional)
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
+import HabitManager from "./HabitManager"; // Habit management component
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Tracks login state
-  const [user, setUser] = useState(null); // Stores user profile
-  const [view, setView] = useState("login"); // Tracks current view (login/signup)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [view, setView] = useState("login");
 
-  // Check for token on page load
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -15,7 +15,6 @@ const App = () => {
     }
   }, []);
 
-  // Fetch user profile from backend
   const fetchUserProfile = async (token) => {
     try {
       const response = await fetch("http://localhost:5001/user/profile", {
@@ -27,7 +26,7 @@ const App = () => {
         setUser(data);
         setIsLoggedIn(true);
       } else {
-        localStorage.removeItem("token"); // Clear invalid token
+        localStorage.removeItem("token");
         setIsLoggedIn(false);
       }
     } catch (err) {
@@ -37,28 +36,26 @@ const App = () => {
     }
   };
 
-  // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Clear token
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
     setUser(null);
   };
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1>HabitX -AI Habit Tracker</h1>
+      <h1>HabitX - Habit Tracker</h1>
 
       {isLoggedIn ? (
-        // Logged-in view
         <div>
           <h2>Welcome, {user?.email}!</h2>
           <p>Account created at: {new Date(user?.createdAt).toLocaleString()}</p>
           <button onClick={handleLogout} style={{ padding: "10px", cursor: "pointer" }}>
             Logout
           </button>
+          <HabitManager userId={user?._id} />
         </div>
       ) : (
-        // Login/Signup view
         <div>
           {view === "login" ? (
             <div>
